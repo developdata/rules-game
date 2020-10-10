@@ -40,20 +40,46 @@ var socket = io();
 document.getElementById("sendButton").addEventListener('click', function(){
 
 const elems = document.getElementsByClassName('name');
+const elemsLength = elems.length;
+
+var incompleteInput = "Please fill in  ";
 
 var ruleArray = [];
+var completedInput = false;
+
+for(i = 0; i < elemsLength; i++){
+	if(elems[i].value === ""){
+		completedInput = false;
+		incompleteInput += elems[i].placeholder.substr(8,6) + " "
+		document.getElementById("warning").innerHTML = incompleteInput;
+	} else {
+		ruleArray.push(elems[i].value);
+		completedInput = true;
+	}
+
+
+}
+
+	if(completedInput === true){
+		document.getElementById("warning").innerHTML = "";
+		document.getElementById("sendButton").disabled = true;
+		socket.emit('new player', ruleArray);
+	}
 
 // iterate using for...of loop
-for (const p of elems) {
-    // console.log(p.value);
-    ruleArray.push(p.value);
-}
+// for (const p of elems) {
+    
+//     if(p.value === ""){
+//     	console.log(elems)
+//     }
+//     ruleArray.push(p.value);
+// }
   
-  if (name.length === 0){
-    name = "no name entered";
-  }
+  // if (name.length === 0){
+  //   name = "no name entered";
+  // }
   //A socket.emit is sent to the server with the new players name
-  socket.emit('new player', ruleArray);
+  // socket.emit('new player', ruleArray);
   
   //Once the player has put in their name, the input field dissapears so they 
   //Can't add another name and can only play one circle
@@ -62,26 +88,20 @@ for (const p of elems) {
   
 //The unordered list
 let list = document.getElementById("playersNames");
+let rulesList = document.getElementById("resultList");
 
 socket.on('update player names', function(newPlayerName){
 
-  console.log(newPlayerName);
-  //When a new player starts, all the names are deleted from
-  //The player list, then new list items are created with
-  //each of the players names
-  // var first = list.firstElementChild; 
-  // while (first) { 
-  //     first.remove(); 
-  //     first = list.firstElementChild; 
-  // } 
-
-  
-  newPlayerName.forEach(function (name, index) {
-    let liNode = document.createElement("LI");
-    let textnode = document.createTextNode(name);
-    liNode.appendChild(textnode);
-    list.appendChild(liNode);
-  });
+  newPlayerName.forEach(function(name, index){
+  	let pNode = document.createElement("P");
+  	let textnode = document.createTextNode(name);
+  	if(index % 3 !== 2){
+		pNode.className = "blankedout";
+	}
+  	// pNode.className = "blankedout"
+  	pNode.appendChild(textnode);
+  	rulesList.appendChild(pNode)
+  })
   
 
 });
