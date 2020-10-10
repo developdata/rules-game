@@ -1,4 +1,5 @@
 var socket = io();
+var allRuleArray = [];
 
 document.getElementById("sendButton").addEventListener('click', function(){
 
@@ -9,7 +10,6 @@ var incompleteInput = "Please fill in  ";
 var completedInput = false;
 
 var ruleArray = [];
-
 
 for(i = 0; i < elemsLength; i++){
 	if(elems[i].value === ""){
@@ -27,7 +27,7 @@ for(i = 0; i < elemsLength; i++){
 		document.getElementById("sendButton").disabled = true;
 		socket.emit('new rules', ruleArray);
 	}
-})
+}) //END OF CLICK TO POST RULES
   
 
 
@@ -36,14 +36,19 @@ let rulesList = document.getElementById("resultList");
 socket.on('update rules', function(newRule){
 
   newRule.forEach(function(name, index){
+  	allRuleArray.push(name);
+  	console.log(allRuleArray);
   	let pNode = document.createElement("P");
   	let textnode = document.createTextNode(name);
   	if(index % 3 !== 2){
 		pNode.className = "blankedout";
 	}
   	pNode.appendChild(textnode);
-  	rulesList.appendChild(pNode)
-  })
+  	rulesList.appendChild(pNode);
+  });
 
 });
 
+document.getElementById("seeRules").addEventListener('click', function(){
+	socket.emit('reveal', ruleArray);
+});
