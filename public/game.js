@@ -37,7 +37,7 @@ socket.on('update rules', function(newRule){
 
   newRule.forEach(function(name, index){
   	allRuleArray.push(name);
-  	console.log(allRuleArray);
+  	// console.log(allRuleArray);
   	let pNode = document.createElement("P");
   	let textnode = document.createTextNode(name);
   	if(index % 3 !== 2){
@@ -50,5 +50,21 @@ socket.on('update rules', function(newRule){
 });
 
 document.getElementById("seeRules").addEventListener('click', function(){
-	socket.emit('reveal', ruleArray);
+	socket.emit('reveal', allRuleArray);
+});
+
+socket.on('show rules', function(showRulesArray){
+	console.log(showRulesArray);
+	rulesList.innerHTML = "";
+
+	showRulesArray.forEach(function(name, index){
+	  	
+	  	let pNode = document.createElement("P");
+	  	let textnode = document.createTextNode(name);
+	  	pNode.appendChild(textnode);
+	  	rulesList.appendChild(pNode);	
+  	});
+  	document.getElementById("seeRules").disabled = true;
+	document.getElementById("next").style.visibility = 'visible';
+	document.getElementsByClassName("instructions")[0].style.visibility = 'hidden';
 });

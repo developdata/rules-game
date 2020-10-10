@@ -48,3 +48,6 @@ button:active {
 .blankedout{
 	background-color: black;
 }
+#next{
+	visibility: hidden;
+}

@@ -17,6 +17,10 @@ io.on('connection', function(socket) {
   socket.on('new rules', function(d) {
     io.sockets.emit('update rules', d);
   });
+
+  socket.on('reveal', function(allRuleArray){
+  	io.sockets.emit('show rules', allRuleArray);
+  });
   
    socket.on('disconnect', function() {
      console.log("disconnected " + socket);
