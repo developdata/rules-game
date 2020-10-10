@@ -40,7 +40,7 @@ socket.on('update rules', function(newRule){
   	// console.log(allRuleArray);
   	let pNode = document.createElement("P");
   	let textnode = document.createTextNode(name);
-  	if(index % 3 !== 2){
+  	if(index % 2 !== 1){
 		pNode.className = "blankedout";
 	}
   	pNode.appendChild(textnode);
